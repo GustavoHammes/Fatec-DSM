@@ -1,0 +1,65 @@
+/* Definindo as variáveis para o Tema Claro (Padrão) */
+:root {
+  --bg-color: #f3f4f6;
+  --text-color: #111827;
+  --btn-bg: #3b82f6;
+  --btn-text: #ffffff;
+  --btn-hover: #2563eb;
+}
+
+/* Quando o elemento tiver data-theme="escuro", as variáveis mudam de valor */
+[data-theme='escuro'] {
+  --bg-color: #1f2937;
+  --text-color: #f9fafb;
+  --btn-bg: #10b981;
+  --btn-text: #111827;
+  --btn-hover: #059669;
+}
+
+/* Estilos do Container Principal */
+.app-container {
+  /* Usando as variáveis que definimos acima */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-family: sans-serif;
+  
+  /* Faz a troca de cor de fundo e texto ser suave (0.3 segundos) */
+  transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+.app-title {
+  margin-bottom: 2rem;
+}
+
+/* Estilos do Botão */
+.theme-button {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  
+  /* Transição suave para o hover */
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Efeito ao passar o mouse (impossível com estilo inline puro) */
+.theme-button:hover {
+  background-color: var(--btn-hover);
+  transform: scale(1.05);
+}
+
+/* Efeito ao clicar no botão */
+.theme-button:active {
+  transform: scale(0.95);
+}
