@@ -1,32 +1,26 @@
 import pandas as pd
+from tabulate import tabulate # Biblioteca para formatar tabelas
 
-# 1. Criamos uma função que automatiza todo o processo
-def gerar_tabela_frequencia(dados_brutos):
-    # Transforma a lista bruta em uma estrutura do Pandas
+def gerar_tabela_frequencia(dados_brutos, horizontal=False):
     df_bruto = pd.Series(dados_brutos)
     
-    # Conta quantas vezes cada número aparece (Fi) e ordena do menor para o maior
+    # Processamento dos dados
     tabela = df_bruto.value_counts().sort_index().reset_index()
-    tabela.columns = ['Dados', 'Fi'] # Renomeia as colunas
-    
-    # 2. Calcula as colunas acumuladas e porcentagens
+    tabela.columns = ['Dados', 'Fi']
     tabela['Fa'] = tabela['Fi'].cumsum()
     
     total_dados = tabela['Fi'].sum()
-    tabela['Fr(%)'] = (tabela['Fi'] / total_dados) * 100
-    
+    tabela['Fr(%)'] = ((tabela['Fi'] / total_dados) * 100).round(0).astype(int)
     tabela['Fra(%)'] = tabela['Fr(%)'].cumsum()
-    
-    # Arredondando as porcentagens para 0 casas decimais para ficar igual ao seu Excel
-    tabela['Fr(%)'] = tabela['Fr(%)'].round(0).astype(int)
-    tabela['Fra(%)'] = tabela['Fra(%)'].round(0).astype(int)
-    
-    return tabela
 
-# ==========================================
-# 3. Inserindo os dados brutos (copiados da sua imagem)
-# ==========================================
-
+    if horizontal:
+        # Transpõe a tabela: 'Dados', 'Fi', etc viram o índice (lateral)
+        tabela = tabela.set_index('Dados').T
+        # 'grid' ou 'psql' dão um visual ótimo de tabela
+        return tabulate(tabela, headers='keys', tablefmt='grid')
+    else:
+        return tabulate(tabela, headers='keys', tablefmt='grid', showindex=False)
+      
 dados_ex01 = [
     5, 4, 6, 1, 2, 5, 3, 1, 3, 3, 4, 4, 1, 5, 5, 6, 1, 2, 5, 1, 3, 4, 5, 1, 1, 6, 6, 2, 1, 1, 4, 4, 4, 3, 4, 3, 2, 2, 2, 3, 6, 6, 3, 2, 4, 2, 6, 6, 2, 1
 ]
@@ -47,10 +41,13 @@ dados_ex02 = [
 
 print("--- TABELA DADOS_DADO ---")
 # to_string(index=False) remove a primeira coluna de índices do Pandas para ficar igual sua imagem
-print(gerar_tabela_frequencia(dados_ex01).to_string(index=False)) 
+print(gerar_tabela_frequencia(dados_ex01, horizontal=False))
+#print(gerar_tabela_frequencia(dados_ex01, horizontal=True))
 
 print("\n--- TABELA CHUVA ---")
-print(gerar_tabela_frequencia(dados_ex02).to_string(index=False))
+print(gerar_tabela_frequencia(dados_ex02, horizontal=False))
+#print(gerar_tabela_frequencia(dados_ex02, horizontal=True))
 
 print("\n--- TABELA ALTURA ---")
-print(gerar_tabela_frequencia(dados_ex03).to_string(index=False))
+print(gerar_tabela_frequencia(dados_ex03, horizontal=False))
+#print(gerar_tabela_frequencia(dados_ex03, horizontal=True))
